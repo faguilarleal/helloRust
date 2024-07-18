@@ -13,17 +13,17 @@ impl Color {
     }
 
     // Método para obtener el valor rojo
-    fn red(&self) -> u8 {
+    pub fn red(&self) -> u8 {
         self.red
     }
 
     // Método para obtener el valor verde
-    fn green(&self) -> u8 {
+    pub fn green(&self) -> u8 {
         self.green
     }
 
     // Método para obtener el valor azul
-    fn blue(&self) -> u8 {
+    pub fn blue(&self) -> u8 {
         self.blue
     }
 
