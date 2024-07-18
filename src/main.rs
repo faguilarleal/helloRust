@@ -1,8 +1,10 @@
 mod color;
 mod framebuffer;
+mod bm;
 
 use color::Color;
 use framebuffer::FrameBuffer;
+use bm::write_bmp_file;
 
 fn main() {
     let background_color = Color::new(255, 255, 255); // Color de fondo blanco
@@ -15,13 +17,17 @@ fn main() {
     framebuffer.point(400, 300, red); // Establecer el color del píxel en el centro
 
     let pixel_color = framebuffer.get_pixel(400, 300); // Obtener el color del píxel en el centro
-    println!("{:?}", pixel_color); // Imprimir el color del píxel
+    println!("Color del píxel en (400, 300): {:?}", pixel_color); // Imprimir el color del píxel
 
-    // Cambiar el color de fondo y limpiar nuevamente
-    let green_background = Color::new(0, 255, 0); // Color de fondo verde
-    framebuffer.set_background_color(green_background);
-    framebuffer.clear();
+    // Guardar el framebuffer como un archivo BMP
+    let buffer: Vec<Color> = framebuffer.buffer.iter()
+        .map(|&color_value| {
+            let red = ((color_value >> 16) & 0xFF) as u8;
+            let green = ((color_value >> 8) & 0xFF) as u8;
+            let blue = (color_value & 0xFF) as u8;
+            Color::new(red, green, blue)
+        })
+        .collect();
 
-    let pixel_color = framebuffer.get_pixel(400, 300); // Obtener el color del píxel en el centro
-    println!("{:?}", pixel_color); // Debería ser verde ahora
+    write_bmp_file("output.bmp", &buffer, framebuffer.width, framebuffer.height).expect("Error writing BMP file");
 }

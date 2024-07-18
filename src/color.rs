@@ -7,38 +7,44 @@ pub struct Color {
 }
 
 impl Color {
-    // Constructor para crear un nuevo color
     pub fn new(red: u8, green: u8, blue: u8) -> Color {
         Color { red, green, blue }
     }
 
-    // Método para obtener el valor rojo
     pub fn red(&self) -> u8 {
         self.red
     }
 
-    // Método para obtener el valor verde
     pub fn green(&self) -> u8 {
         self.green
     }
 
-    // Método para obtener el valor azul
     pub fn blue(&self) -> u8 {
         self.blue
     }
 
-    // Método para establecer el valor rojo
     pub fn set_red(&mut self, red: u8) {
         self.red = red;
     }
 
-    // Método para establecer el valor verde
     pub fn set_green(&mut self, green: u8) {
         self.green = green;
     }
 
-    // Método para establecer el valor azul
     pub fn set_blue(&mut self, blue: u8) {
         self.blue = blue;
+    }
+
+    // Métodos para obtener los componentes de color para BMP
+    pub fn r(&self) -> u8 {
+        self.red
+    }
+
+    pub fn g(&self) -> u8 {
+        self.green
+    }
+
+    pub fn b(&self) -> u8 {
+        self.blue
     }
 }
