@@ -35,7 +35,18 @@ fn main() {
                  (193, 383)
     ];
 
+    let polygon_points2 =[
+        (321, 335),
+         (288, 286),
+          (339, 251),
+           (374, 302)
+    ];
+
+    println!("Polygon 1  !!");
     framebuffer.draw_polygon(&polygon_points, 0xFFFFFF, 0xFFFB00);
+
+    println!("Polygon 2 !!");
+    framebuffer.draw_polygon(&polygon_points2, 0xFFFFFF, 0x0097FF);
 
     // Save the framebuffer as a BMP file
     framebuffer.render_buffer("output.bmp").expect("Error writing BMP file");
