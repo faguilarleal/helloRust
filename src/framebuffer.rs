@@ -7,6 +7,7 @@ pub struct Framebuffer {
     buffer: Vec<u32>,
     background_color: u32,
     current_color: u32,
+    line_color: u32,
 }
 
 impl Framebuffer {
@@ -18,6 +19,7 @@ impl Framebuffer {
             buffer,
             background_color: 0x000000, // Default background color (black)
             current_color: 0x000000, // Default drawing color (black)
+            line_color: 0x000000, // Default line color (black)
         }
     }
 
@@ -43,6 +45,10 @@ impl Framebuffer {
         self.current_color = color;
     }
 
+    pub fn set_line_color(&mut self, color: u32) {
+        self.line_color = color;
+    }
+    
     pub fn point(&mut self, x: usize, y: usize) {
         if x < self.width && y < self.height {
             let index = y * self.width + x;

@@ -2,12 +2,12 @@ use crate::framebuffer::Framebuffer;
 
 pub trait Line {
     fn line(&mut self, x1: usize, y1: usize, x2: usize, y2: usize);
-    fn draw_polygon(&mut self, points: &[(usize, usize)]);
-    fn fill_polygon(&mut self, points: &[(usize, usize)]);
+    fn draw_polygon(&mut self, points: &[(usize, usize)], border_color: u32, fill_color: u32);
+    fn fill_polygon(&mut self, points: &[(usize, usize)], border_color: u32);
 }
 
-impl Line for Framebuffer {
-    fn line(&mut self, x1: usize, y1: usize, x2: usize, y2: usize) {
+impl Framebuffer {
+    pub fn line(&mut self, x1: usize, y1: usize, x2: usize, y2: usize, thickness: usize) {
         let mut x1 = x1 as isize;
         let mut y1 = y1 as isize;
         let x2 = x2 as isize;
@@ -21,7 +21,16 @@ impl Line for Framebuffer {
 
         loop {
             if x1 >= 0 && x1 < self.width() as isize && y1 >= 0 && y1 < self.height() as isize {
-                self.point(x1 as usize, y1 as usize);
+                // Draw the line with thickness
+                for i in -(thickness as isize) / 2..=thickness as isize / 2 {
+                    for j in (-(thickness as isize) / 2)..=(thickness as isize / 2) {
+                        let nx = x1 + i;
+                        let ny = y1 + j;
+                        if nx >= 0 && nx < self.width() as isize && ny >= 0 && ny < self.height() as isize {
+                            self.point(nx as usize, ny as usize);
+                        }
+                    }
+                }
             }
             if x1 == x2 && y1 == y2 { break; }
             let e2 = 2 * err;
@@ -36,25 +45,28 @@ impl Line for Framebuffer {
         }
     }
 
-    fn draw_polygon(&mut self, points: &[(usize, usize)]) {
+    pub fn draw_polygon(&mut self, points: &[(usize, usize)], border_color: u32, fill_color: u32) {
         let n = points.len();
         if n < 3 {
             eprintln!("A polygon requires at least 3 points.");
             return;
         }
 
-        // Draw the edges of the polygon
+        // Set border color and draw the edges of the polygon with thickness
+        self.set_current_color(border_color);
+        let border_thickness = 5; // Adjust thickness as needed
         for i in 0..n {
             let (x1, y1) = points[i];
             let (x2, y2) = points[(i + 1) % n];
-            self.line(x1, y1, x2, y2);
+            self.line(x1, y1, x2, y2, border_thickness);
         }
 
-        // Fill the polygon
-        self.fill_polygon(points);
+        // Fill the polygon with the fill color
+        self.set_current_color(fill_color);
+        self.fill_polygon(points, fill_color);
     }
 
-    fn fill_polygon(&mut self, points: &[(usize, usize)]) {
+    pub fn fill_polygon(&mut self, points: &[(usize, usize)], fill_color: u32) {
         let min_y = points.iter().map(|(_, y)| *y).min().unwrap() as isize;
         let max_y = points.iter().map(|(_, y)| *y).max().unwrap() as isize;
 
@@ -64,7 +76,7 @@ impl Line for Framebuffer {
                 let (x1, y1) = points[i];
                 let (x2, y2) = points[(i + 1) % points.len()];
 
-                if (y1 as usize <= y.try_into().unwrap() && y2 as usize > y.try_into().unwrap()) || (y2 as usize <= y.try_into().unwrap() && y1 as usize > y.try_into().unwrap()) {
+                if (y1 <= y.try_into().unwrap() && y2 > y.try_into().unwrap()) || (y2 <= y.try_into().unwrap() && y1 > y.try_into().unwrap()) {
                     let t = (y as f32 - y1 as f32) / (y2 as f32 - y1 as f32);
                     let x = x1 as f32 + t * (x2 as f32 - x1 as f32);
                     intersections.push(x);
