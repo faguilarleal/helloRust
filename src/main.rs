@@ -24,8 +24,17 @@ fn main() {
     framebuffer.line(400, 50, 400, 550);
     framebuffer.line(50, 300, 750, 300);
 
-    // Save the framebuffer as a BMP file
-    framebuffer.render_buffer("lines.bmp").expect("Error writing BMP file");
+    // Draw and fill a polygon
+    let polygon_points = [
+        (100, 100),
+        (700, 100),
+        (700, 500),
+        (100, 500),
+    ];
+    framebuffer.draw_polygon(&polygon_points);
 
-    println!("Framebuffer rendered to lines.bmp");
+    // Save the framebuffer as a BMP file
+    framebuffer.render_buffer("output.bmp").expect("Error writing BMP file");
+
+    println!("Framebuffer rendered to output.bmp");
 }
