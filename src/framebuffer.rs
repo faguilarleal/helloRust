@@ -51,8 +51,9 @@ impl Framebuffer {
     
     pub fn point(&mut self, x: usize, y: usize) {
         if x < self.width && y < self.height {
-            let index = y * self.width + x;
-            self.buffer[index] = self.current_color;
+            // Invertir el eje Y
+            let inverted_y = self.height - 1 - y;
+            self.buffer[inverted_y * self.width + x] = self.current_color;
         }
     }
 
