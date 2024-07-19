@@ -1,5 +1,4 @@
-// color.rs
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct Color {
     red: u8,
     green: u8,
@@ -33,18 +32,5 @@ impl Color {
 
     pub fn set_blue(&mut self, blue: u8) {
         self.blue = blue;
-    }
-
-    // Métodos para obtener los componentes de color para BMP
-    pub fn r(&self) -> u8 {
-        self.red
-    }
-
-    pub fn g(&self) -> u8 {
-        self.green
-    }
-
-    pub fn b(&self) -> u8 {
-        self.blue
     }
 }

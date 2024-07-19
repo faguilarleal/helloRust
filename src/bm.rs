@@ -1,4 +1,3 @@
-// bmp.rs
 use std::fs::File;
 use std::io::{BufWriter, Write};
 use crate::color::Color;
@@ -39,7 +38,7 @@ pub fn write_bmp_file(
         for x in 0..width {
             let index = y * width + x;
             let color = &buffer[index];
-            writer.write_all(&[color.b(), color.g(), color.r()])?;
+            writer.write_all(&[color.blue(), color.green(), color.red()])?;
         }
         for _ in 0..padding_size {
             writer.write_all(&[0u8])?;

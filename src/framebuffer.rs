@@ -43,13 +43,17 @@ impl FrameBuffer {
         }
     }
 
-    pub fn get_pixel(&self, x: usize, y: usize) -> Color {
+    pub fn get_pixel(&self, x: usize, y: usize) -> Option<Color> {
         let index = self.get_index(x, y);
-        let color_value = self.buffer[index];
-        let red = ((color_value >> 16) & 0xFF) as u8;
-        let green = ((color_value >> 8) & 0xFF) as u8;
-        let blue = (color_value & 0xFF) as u8;
-        Color::new(red, green, blue)
+        if index < self.buffer.len() {
+            let color_value = self.buffer[index];
+            let red = ((color_value >> 16) & 0xFF) as u8;
+            let green = ((color_value >> 8) & 0xFF) as u8;
+            let blue = (color_value & 0xFF) as u8;
+            Some(Color::new(red, green, blue))
+        } else {
+            None
+        }
     }
 
     pub fn set_background_color(&mut self, color: Color) {
