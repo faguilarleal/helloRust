@@ -54,7 +54,7 @@ impl Framebuffer {
 
         // Set border color and draw the edges of the polygon with thickness
         self.set_current_color(border_color);
-        let border_thickness = 5; // Adjust thickness as needed
+        let border_thickness = 2; // Adjust thickness as needed
         for i in 0..n {
             let (x1, y1) = points[i];
             let (x2, y2) = points[(i + 1) % n];
