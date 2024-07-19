@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::{BufWriter, Write};
-use crate::color::Color;
+use super::color::Color;
 
 pub fn write_bmp_file(
     file_path: &str,
