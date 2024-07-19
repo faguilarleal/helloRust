@@ -16,20 +16,21 @@ fn main() {
     framebuffer.clear();
 
     // Set the current drawing color to black
-    framebuffer.set_current_color(0x000000);
+    framebuffer.set_current_color(0xFFFB00);
 
-    // Draw some lines using Bresenham's algorithm
-    framebuffer.line(100, 100, 700, 500);
-    framebuffer.line(700, 100, 100, 500);
-    framebuffer.line(400, 50, 400, 550);
-    framebuffer.line(50, 300, 750, 300);
 
     // Draw and fill a polygon
     let polygon_points = [
-        (100, 100),
-        (700, 100),
-        (700, 500),
-        (100, 500),
+        (165, 380),
+         (185, 360),
+          (180, 330),
+           (207, 345),
+            (233, 330),
+             (230, 360),
+              (250, 380),
+               (220, 385),
+                (205, 410),
+                 (193, 383)
     ];
     framebuffer.draw_polygon(&polygon_points);
 

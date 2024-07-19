@@ -43,19 +43,20 @@ impl Line for Framebuffer {
             return;
         }
 
+        // Draw the edges of the polygon
         for i in 0..n {
             let (x1, y1) = points[i];
             let (x2, y2) = points[(i + 1) % n];
             self.line(x1, y1, x2, y2);
         }
 
-        // Fill the polygon after drawing the outline
+        // Fill the polygon
         self.fill_polygon(points);
     }
 
     fn fill_polygon(&mut self, points: &[(usize, usize)]) {
-        let min_y = points.iter().map(|&(_, y)| y).min().unwrap_or(0);
-        let max_y = points.iter().map(|&(_, y)| y).max().unwrap_or(self.height() as usize - 1);
+        let min_y = points.iter().map(|(_, y)| *y).min().unwrap() as isize;
+        let max_y = points.iter().map(|(_, y)| *y).max().unwrap() as isize;
 
         for y in min_y..=max_y {
             let mut intersections = Vec::new();
@@ -63,7 +64,7 @@ impl Line for Framebuffer {
                 let (x1, y1) = points[i];
                 let (x2, y2) = points[(i + 1) % points.len()];
 
-                if (y1 <= y && y2 > y) || (y2 <= y && y1 > y) {
+                if (y1 as usize <= y.try_into().unwrap() && y2 as usize > y.try_into().unwrap()) || (y2 as usize <= y.try_into().unwrap() && y1 as usize > y.try_into().unwrap()) {
                     let t = (y as f32 - y1 as f32) / (y2 as f32 - y1 as f32);
                     let x = x1 as f32 + t * (x2 as f32 - x1 as f32);
                     intersections.push(x);
@@ -77,9 +78,7 @@ impl Line for Framebuffer {
                     let x1 = intersections[i].round() as isize;
                     let x2 = intersections[i + 1].round() as isize;
                     for x in x1..=x2 {
-                        if x >= 0 && x < self.width() as isize {
-                            self.point(x as usize, y);
-                        }
+                        self.point(x as usize, y as usize);
                     }
                 }
             }
